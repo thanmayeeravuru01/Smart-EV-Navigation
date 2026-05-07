@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | ChargeMate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+</head>
+<body>
+
+<!-- FLASH NOTIFICATIONS -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-wrapper">
+    {% for category, message in messages %}
+        {% if category != 'logout' %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+
+<!-- TOP BAR -->
+<header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <h1>Admin Dashboard</h1>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="sidebar">
+    <nav>
+        <a href="{{ url_for('admin.dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('admin.stations_admin') }}">⚡ Manage Stations</a>
+        <a href="{{ url_for('admin.view_bookings') }}">⏳ Pending Bookings</a>
+        <a href="{{ url_for('admin.all_bookings') }}">📋 All Bookings</a>
+        <a href="{{ url_for('admin.view_users') }}">👤 Users</a>
+        <a href="{{ url_for('admin.admin_contact_us') }}">📩 User Queries</a>
+        <a href="{{ url_for('admin.admin_feedback') }}">💬 Feedback</a>
+        <a href="{{ url_for('admin.logout') }}" class="logout">🚪 Logout</a>
+    </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+    <h2>Welcome Admin 👋</h2>
+    <p class="subtext">Here’s what’s happening on ChargeMate today.</p>
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
+        <div class="summary-box">
+            <span>Total Stations</span>
+            <strong>{{ total_stations }}</strong>
+        </div>
+        <div class="summary-box">
+            <span>Pending Bookings</span>
+            <strong>{{ pending_bookings }}</strong>
+        </div>
+        <div class="summary-box">
+            <span>Total Users</span>
+            <strong>{{ total_users }}</strong>
+        </div>
+        
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+            <a href="{{ url_for('admin.stations_admin') }}">➕ Add / Manage Stations</a>
+            <a href="{{ url_for('admin.view_bookings') }}">⏳ Review Pending Bookings</a>
+            <a href="{{ url_for('admin.admin_feedback') }}">💬 View Feedback</a>
+        </div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="section">
+        <h3>Recent Activity</h3>
+        <ul class="activity-list">
+            {% for log in recent_activity %}
+                <li>{{ log }}</li>
+            {% else %}
+                <li>No recent activity</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</main>
+
+
+<footer>
+    © 2025 ChargeMate. All Rights Reserved.
+</footer>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* auto-hide flash */
+setTimeout(() => {
+    const f = document.querySelector('.flash-wrapper');
+    if (f) f.style.display = 'none';
+}, 3000);
+</script>
+
+</body>
+</html>

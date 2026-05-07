@@ -1,0 +1,148 @@
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* ===== NAVBAR ===== */
+.bh-navbar {
+    height: 64px;
+    background: linear-gradient(135deg, #00509e, #00509e);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.bh-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bh-hamburger {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.bh-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.bh-user {
+    font-weight: 500;
+}
+
+/* ===== SIDE MENU ===== */
+.bh-menu {
+    position: absolute;
+    top: 64px;
+    left: 20px;
+    width: 230px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.bh-menu a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.bh-menu a:hover {
+    background: #f1f5f9;
+}
+
+.bh-menu .danger {
+    color: #dc2626;
+}
+.btn-back {
+    color: #ffffff;
+}
+.bh-menu.show {
+    display: block;
+}
+
+/* ===== CONTENT ===== */
+.bh-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.bh-card {
+    background: white;
+    border-radius: 16px;
+    padding: 26px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.bh-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+/* ===== VEHICLE ===== */
+.bh-vehicle {
+    padding: 16px;
+    border-radius: 12px;
+    background: #f9fafb;
+    margin-bottom: 18px;
+}
+
+.bh-vehicle h3 {
+    margin: 0 0 12px;
+    color: #0f172a;
+}
+
+.bh-stats {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 10px;
+}
+
+.stat span {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.stat strong {
+    display: block;
+    font-size: 18px;
+    color: #0a7cff;
+}
+
+/* ===== HEALTH BAR ===== */
+.bh-bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bh-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+/* ===== GRAPH ===== */
+.bh-graph {
+    text-align: center;
+}
+
+.bh-graph img {
+    max-width: 100%;
+    border-radius: 12px;
+}

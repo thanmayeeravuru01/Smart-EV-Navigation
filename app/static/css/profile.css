@@ -1,0 +1,137 @@
+/* Page background */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(120deg, #eef2f7, #f8fafc);
+  min-height: 100vh;
+}
+
+/* Container */
+.container {
+  max-width: 520px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 30px 32px;
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #004d99;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0a7cff;
+  box-shadow: 0 0 0 2px rgba(10,124,255,0.15);
+}
+
+/* Button */
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00509e, #00509e);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.back-button {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #00509e;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-back:hover {
+    background: #045ecb;
+    transform: translateY(-1px);
+}
+
+
+/* FLASH NOTIFICATIONS */
+.flash-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.flash {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  animation: slideIn 0.4s ease;
+}
+
+/* Success */
+.flash.success {
+  background: #e6f9f0;
+  color: #065f46;
+  border-left: 5px solid #10b981;
+}
+
+/* Error */
+.flash.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 5px solid #ef4444;
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Auto-hide after 3s (optional JS helper) */

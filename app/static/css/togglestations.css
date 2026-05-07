@@ -1,0 +1,149 @@
+/* RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* BODY */
+body {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #eef2f7, #f8fafc);
+  padding: 40px 16px;
+}
+
+/* FLASH */
+.flash-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3000;
+}
+
+.flash {
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.15);
+  animation: slideIn .4s ease;
+}
+
+.flash.success {
+  background: #e6f9f0;
+  color: #065f46;
+  border-left: 5px solid #10b981;
+}
+
+.flash.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 5px solid #ef4444;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* CONTAINER */
+.ts-container {
+  max-width: 620px;
+  margin: auto;
+}
+
+/* HEADER */
+/* HEADER */
+.ts-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  position: relative; /* Make the header position relative */
+}
+
+.ts-back {
+  font-size: 14px;
+  color:#00509e;
+  text-decoration: none;
+  font-weight: 600;
+  position: absolute; /* Position the back button absolutely */
+  top: 0;
+  right: 0;
+  padding: 10px; /* Add some padding for spacing */
+}
+
+.ts-back:hover {
+  text-decoration: underline;
+}
+
+
+.ts-header h1 {
+  color: #1e293b;
+  font-size: 24px;
+}
+
+
+
+
+/* CARD */
+.ts-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #0a7cff;
+  box-shadow: 0 0 0 2px rgba(10,124,255,0.15);
+}
+
+/* BUTTON */
+.ts-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg,#00509e, #00509e);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.ts-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(10,124,255,0.35);
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .ts-header h1 {
+    font-size: 20px;
+  }
+}

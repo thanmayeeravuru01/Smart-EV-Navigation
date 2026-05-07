@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Charging Station | ChargeMate Admin</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(120deg, #eef2f7, #f8fafc);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px 32px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .back-btn {
+            border: none;
+            background: none;
+            color: #0a7cff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #0a7cff;
+            box-shadow: 0 0 0 2px rgba(10,124,255,0.15);
+        }
+
+        #map {
+            width: 100%;
+            height: 340px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            background: linear-gradient(135deg, #0a7cff, #04befe);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(10,124,255,0.35);
+        }
+
+        /* Autocomplete dropdown */
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 999;
+            margin-top: 6px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .autocomplete-suggestions li {
+            padding: 12px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .autocomplete-suggestions li:hover {
+            background: #f1f5f9;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <div class="header">
+            <button class="back-btn" onclick="window.history.back()">← Back</button>
+            <h2>Add Charging Station</h2>
+        </div>
+
+        <form action="{{ url_for('admin.add_station') }}" method="POST">
+
+            <div class="form-group">
+                <label for="name">Station Name</label>
+                <input type="text" id="name" name="name" placeholder="Eg: Kokapet EV Hub" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location Name</label>
+                <input type="text" id="location" name="location" placeholder="Search area or landmark" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+                <label>Select Location on Map</label>
+                <div id="map"></div>
+            </div>
+
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+
+            <button type="submit">➕ Add Station</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    const map = L.map('map').setView([20.5937, 78.9629], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    let marker = L.marker([20.5937, 78.9629], { opacity: 0 }).addTo(map);
+
+    const locationInput = document.getElementById("location");
+
+    locationInput.addEventListener("input", () => {
+        const q = locationInput.value;
+        if (q.length < 3) return;
+
+        fetch(`https://us1.locationiq.com/v1/search.php?key=pk.218199c167e2d299d7a2ac441eac33b2&q=${q}&format=json`)
+            .then(res => res.json())
+            .then(data => {
+                document.querySelectorAll(".autocomplete-suggestions").forEach(el => el.remove());
+
+                const ul = document.createElement("ul");
+                ul.className = "autocomplete-suggestions";
+
+                data.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = item.display_name;
+                    li.onclick = () => {
+                        locationInput.value = item.display_name;
+                        document.getElementById("latitude").value = item.lat;
+                        document.getElementById("longitude").value = item.lon;
+                        marker.setLatLng([item.lat, item.lon]).setOpacity(1);
+                        map.setView([item.lat, item.lon], 14);
+                        ul.remove();
+                    };
+                    ul.appendChild(li);
+                });
+
+                locationInput.parentNode.appendChild(ul);
+            });
+    });
+
+    map.on("click", e => {
+        document.getElementById("latitude").value = e.latlng.lat;
+        document.getElementById("longitude").value = e.latlng.lng;
+        marker.setLatLng(e.latlng).setOpacity(1);
+    });
+</script>
+
+</body>
+</html>

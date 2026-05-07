@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Energy Saving Tips – ChargeMate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/energytips.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="et-navbar">
+    <div class="et-left">
+        <div class="et-hamburger" onclick="toggleMenu()">☰</div>
+        <span class="et-title">ChargeMate</span>
+    </div>
+    <div class="et-right">
+        <span>Energy Tips</span>
+    </div>
+</div>
+
+<!-- ================= MENU ================= -->
+<div class="et-menu" id="etMenu">
+    <a href="{{ url_for('main.profile') }}">👤 Profile</a>
+    <a href="{{ url_for('main.change_password') }}">🔑 Change Password</a>
+    <a href="{{ url_for('main.view_vehicles') }}">🚗 My Vehicles</a>
+    <a href="{{ url_for('main.logout') }}" class="danger">🚪 Logout</a>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<div class="et-container">
+
+    <h1>Maximize Your EV’s Efficiency ⚡</h1>
+    <p class="subtitle">
+        Simple habits that improve range, battery life, and charging efficiency.
+    </p>
+
+    <!-- TIP CARD -->
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t1')">
+            <span>🚗 Drive Smoothly</span>
+            <button>+</button>
+        </div>
+        <div id="t1" class="tip-body">
+            <p>Smooth driving significantly improves range.</p>
+            <ul>
+                <li>Accelerate gradually</li>
+                <li>Maintain steady speed</li>
+                <li>Avoid sudden braking</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t2')">
+            <span>🛞 Monitor Tire Pressure</span>
+            <button>+</button>
+        </div>
+        <div id="t2" class="tip-body">
+            <p>Under-inflated tires increase energy loss.</p>
+            <ul>
+                <li>Check pressure monthly</li>
+                <li>Follow recommended PSI</li>
+                <li>Inspect before long trips</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t3')">
+            <span>❄️ Limit AC & Heating</span>
+            <button>+</button>
+        </div>
+        <div id="t3" class="tip-body">
+            <p>Climate systems consume significant battery.</p>
+            <ul>
+                <li>Use eco climate mode</li>
+                <li>Pre-cool while charging</li>
+                <li>Prefer seat heaters</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t4')">
+            <span>🔄 Use Regenerative Braking</span>
+            <button>+</button>
+        </div>
+        <div id="t4" class="tip-body">
+            <p>Regenerative braking recovers lost energy.</p>
+            <ul>
+                <li>Enable regen mode</li>
+                <li>Coast to slow down</li>
+                <li>Avoid harsh braking</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- EXTRA TIPS -->
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t5')">
+            <span>🔋 Charge Between 20% – 80%</span>
+            <button>+</button>
+        </div>
+        <div id="t5" class="tip-body">
+            <p>This range improves long-term battery health.</p>
+            <ul>
+                <li>Avoid frequent 0–100% charging</li>
+                <li>Use fast charging only when needed</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tip-card">
+        <div class="tip-header" onclick="toggleTip('t6')">
+            <span>📍 Plan Charging Stops</span>
+            <button>+</button>
+        </div>
+        <div id="t6" class="tip-body">
+            <p>Smart planning reduces anxiety and saves time.</p>
+            <ul>
+                <li>Use ChargeMate navigation</li>
+                <li>Avoid peak congestion slots</li>
+                <li>Charge while shopping or resting</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="et-footer">
+    © 2025 ChargeMate • Drive Smart, Charge Smarter ⚡
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+function toggleMenu() {
+    document.getElementById("etMenu").classList.toggle("show");
+}
+
+function toggleTip(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", function(e) {
+    if (!e.target.closest(".et-hamburger")) {
+        document.getElementById("etMenu").classList.remove("show");
+    }
+});
+</script>
+
+</body>
+</html>

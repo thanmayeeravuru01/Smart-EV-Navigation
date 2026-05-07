@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Stations | Admin</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/managestations_new.css') }}">
+</head>
+
+<body>
+
+<div class="ms-container">
+
+    <!-- HEADER -->
+    <div class="ms-header">
+    <a href="{{ url_for('admin.add_station') }}" class="ms-add-btn">➕ Add Station</a>
+
+    <h1>Manage Charging Stations</h1>
+
+    <a href="{{ url_for('admin.stations_admin') }}" class="ms-back">⬅ Back</a>
+</div>
+
+
+    <!-- TABLE CARD -->
+    <div class="ms-card">
+
+        <table class="ms-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Station Name</th>
+                    <th>Location</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for station in stations %}
+                <tr>
+                    <td>{{ station.id }}</td>
+                    <td>{{ station.name }}</td>
+                    <td>{{ station.location }}</td>
+                    <td>{{ station.latitude }}</td>
+                    <td>{{ station.longitude }}</td>
+
+                    <td class="ms-actions">
+
+                        <!-- DELETE -->
+                        <form method="POST" action="{{ url_for('admin.delete_station') }}">
+                            <input type="hidden" name="station-id-delete" value="{{ station.id }}">
+                            <button type="submit" class="ms-btn danger">Delete</button>
+                        </form>
+
+                        <!-- UPDATE -->
+                        <form method="POST" action="{{ url_for('admin.edit_station') }}" class="ms-edit-form">
+                            <input type="hidden" name="station-id" value="{{ station.id }}">
+                            <input type="text" name="station-name-edit" value="{{ station.name }}">
+                            <input type="text" name="station-location-edit" value="{{ station.location }}">
+                            <button type="submit" class="ms-btn primary">Update</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="ms-empty">No stations available.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

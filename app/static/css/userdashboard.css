@@ -1,0 +1,139 @@
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* ===== NAVBAR ===== */
+.ud-navbar {
+    height: 64px;
+    background: linear-gradient(135deg, #00509e,#00509e);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.ud-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ud-hamburger {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.ud-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.ud-user {
+    font-weight: 500;
+}
+
+/* ===== SIDE MENU ===== */
+.ud-menu {
+    position: absolute;
+    top: 64px;
+    left: 20px;
+    width: 220px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.ud-menu a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.ud-menu a:hover {
+    background: #f1f5f9;
+}
+
+.ud-menu .danger {
+    color: #dc2626;
+}
+
+.ud-menu.show {
+    display: block;
+}
+
+/* ===== FLASH ===== */
+.ud-flash-wrapper {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.ud-flash {
+    background: #e3f2fd;
+    color: #0d47a1;
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ===== MAIN ===== */
+.ud-main {
+    padding: 40px 20px;
+}
+
+/* ✅ SINGLE COLUMN LAYOUT */
+.ud-grid {
+    max-width: 800px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr; /* ONE CARD PER ROW */
+    gap: 22px;
+}
+
+/* ===== CARD ===== */
+.ud-card {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    text-decoration: none;
+    color: #1f2937;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.ud-card h3 {
+    margin: 0 0 8px;
+}
+
+.ud-card p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.ud-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+}
+
+/* ===== FOOTER ===== */
+.ud-footer {
+    text-align: center;
+    padding: 18px;
+    background: #003366;
+    color: white;
+    margin-top: 40px;
+}

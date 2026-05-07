@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+
+<body>
+  <div class="back-button">
+    <a href="{{ url_for('main.user_dashboard') }}" class="btn-back">⬅ Back</a>
+</div>
+  <!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-wrapper">
+  {% for category, message in messages %}
+    <div class="flash {{ category }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+  <div class="container">
+  <h1>User Profile</h1>
+   
+  <form action="{{ url_for('main.profile') }}" method="POST">
+    <label for="name">Full Name</label>
+    <input type="text" name="name" id="name" value="{{ user.name }}">
+    <label for="email">Email Address</label>
+<input type="email" name="email" id="email" value="{{ user.email }}">
+<label for="phone">Phone Number</label>
+
+    <input type="phone" name="phone" id="phone" value="{{ user.phone }}" required>
+    
+    <button type="submit">Update Profile</button>
+</form>
+</div>
+</body>
+</html>

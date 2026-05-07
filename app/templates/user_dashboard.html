@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard – ChargeMate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Dashboard CSS -->
+  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/userdashboard.css') }}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="ud-navbar">
+    <div class="ud-left">
+        <div class="ud-hamburger" onclick="toggleMenu()">☰</div>
+        <span class="ud-title">ChargeMate</span>
+    </div>
+
+    <div class="ud-right">
+        <span class="ud-user">Hello, {{ user.name }}</span>
+    </div>
+</div>
+
+<!-- ================= SIDE MENU ================= -->
+<div class="ud-menu" id="udMenu">
+    <a href="{{ url_for('main.profile') }}">👤 Profile</a>
+    <a href="{{ url_for('main.change_password') }}">🔑 Change Password</a>
+    <a href="{{ url_for('main.logout') }}" class="danger">🚪 Logout</a>
+</div>
+
+<!-- ================= FLASH ================= -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="ud-flash-wrapper">
+    {% for category, message in messages %}
+        <div class="ud-flash {{ category }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="ud-main">
+
+    <div class="ud-grid">
+
+        <a href="{{ url_for('main.charging_stations') }}" class="ud-card">
+            <h3>🔌 Find Charging Stations</h3>
+            <p>Locate nearby EV charging points</p>
+        </a>
+
+        <a href="{{ url_for('main.my_bookings') }}" class="ud-card">
+            <h3>📅 My Bookings</h3>
+            <p>View and manage your bookings</p>
+        </a>
+
+        <a href="{{ url_for('main.view_vehicles') }}" class="ud-card">
+            <h3>🚗 Manage Vehicles</h3>
+            <p>Add or update your EVs</p>
+        </a>
+
+        <a href="{{ url_for('main.battery_health') }}" class="ud-card">
+            <h3>🔋 Battery Health</h3>
+            <p>Monitor battery performance</p>
+        </a>
+
+        <a href="{{ url_for('main.features') }}" class="ud-card">
+            <h3>✨ Features</h3>
+            <p>Explore smart EV features</p>
+        </a>
+
+    </div>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ud-footer">
+    © 2025 ChargeMate. All Rights Reserved.
+</footer>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("udMenu");
+    menu.classList.toggle("show");
+}
+
+document.addEventListener("click", function(e) {
+    const menu = document.getElementById("udMenu");
+    if (!e.target.closest(".ud-hamburger")) {
+        menu.classList.remove("show");
+    }
+});
+
+// Auto-hide flash
+setTimeout(() => {
+    const f = document.querySelector('.ud-flash-wrapper');
+    if (f) f.style.display = 'none';
+}, 3000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route to EV Charging Station</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* ===== Global ===== */
+body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== Map ===== */
+#map {
+    height: 420px;
+    width: 100%;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* ===== Main Container ===== */
+.route-info {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background: white;
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* ===== Form Blocks ===== */
+.vehicle-selection,
+.date-selection,
+.slot-selection {
+    background: white;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* ===== Labels ===== */
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* ===== Inputs & Selects ===== */
+select,
+input[type="number"],
+input[type="date"] {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+/* ===== Congestion ===== */
+.congestion-box {
+    margin-top: 12px;
+}
+
+.congestion-label {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.congestion-bar {
+    width: 100%;
+    height: 18px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.congestion-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.5s ease, background-color 0.3s;
+}
+
+/* ===== Time Selection ===== */
+#time-container {
+    margin-top: 10px;
+}
+
+#time-container select {
+    width: 100%;
+}
+
+/* ===== Book Button ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #0a7cff, #04befe);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ===== Messages ===== */
+#time-container p {
+    font-size: 14px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+    #map {
+        height: 360px;
+    }
+
+    .route-info,
+    .vehicle-selection,
+    .date-selection,
+    .slot-selection {
+        margin: 10px;
+        padding: 14px;
+    }
+}
+ .back-btn {
+    background: transparent;
+    border: none;
+    color: #0a7cff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+
+    <div id="map"></div>
+
+    <div class="route-info" id="route-info"></div>
+
+    <div class="vehicle-selection">
+        <label for="vehicle-select">Select Vehicle: </label>
+        <select id="vehicle-select">
+            <option value="">--Select Vehicle--</option>
+        </select>
+    </div>
+    
+
+    <div class="date-selection">
+    <label for="booking-date">Select Date: </label>
+    <input type="date" id="booking-date">
+</div>
+
+
+    <div class="slot-selection">
+        <label for="slot-select">Choose Slot: </label>
+        <select id="slot-select">
+            <option value="">--Select Slot--</option>
+            <option value="1">Slot 1</option>
+            <option value="2">Slot 2</option>
+            <option value="3">Slot 3</option>
+            <option value="4">Slot 4</option>
+            <option value="5">Slot 5</option>
+            <option value="6">Slot 6</option>
+            <option value="7">Slot 7</option>
+            
+        </select>
+        <div class="congestion-box">
+    <div class="congestion-label" id="congestion-text">
+        Loading congestion...
+    </div>
+
+    <div class="congestion-bar">
+        <div class="congestion-fill" id="congestion-fill"></div>
+    </div>
+</div>
+<div id="time-container"></div>
+
+        <br>
+
+        <br>
+        <label for="kwh-input">Enter KWh: </label>
+        <input type="number" id="kwh-input" placeholder="Enter KWh" min="1" step="0.1">
+
+        <br><br>
+        <button onclick="bookSlot()">Book Slot</button>
+    </div>
+
+    <script>
+        
+  function goBack() {
+    window.history.back();
+  }
+
+        
+console.log("JS VERSION 2026-01-02 v5 LOADED");
+
+
+        const dateInput = document.getElementById("booking-date");
+const today = new Date().toISOString().split("T")[0];
+dateInput.value = today;
+dateInput.min = today;
+
+        const locationIQApiKey = 'pk.218199c167e2d299d7a2ac441eac33b2'; // Replace with your LocationIQ API key
+        let map, routeLayer;
+
+
+const stationId = Number("{{ stationId }}");
+const stationLat = Number("{{ stationLat }}");
+const stationLon = Number("{{ stationLon }}");
+const stationName = "{{ stationName }}";
+const stationAddress = "{{ stationAddress }}";
+const userLat = Number("{{ userLat }}");
+const userLon = Number("{{ userLon }}");
+
+console.log("StationID:", stationId);
+
+
+
+
+   const slotRanges = [
+    ['00:00', '01:00', '02:00'],
+    ['03:00', '04:00', '05:00'],
+    ['06:00', '07:00', '08:00'],
+    ['09:00', '10:00', '11:00'],
+    ['12:00', '13:00', '14:00'],
+    ['15:00', '16:00', '17:00'],
+    ['18:00', '19:00', '20:00'],
+    ['21:00', '22:00', '23:00']
+];
+
+
+
+function loadCongestion() {
+    fetch(`/station_congestion/${stationId}`)
+        .then(res => res.json())
+        .then(d => {
+            const fill = document.getElementById("congestion-fill");
+            const text = document.getElementById("congestion-text");
+
+            fill.style.width = d.percentage + "%";
+
+            if (d.level === "GREEN") {
+                fill.style.backgroundColor = "green";
+            } else if (d.level === "YELLOW") {
+                fill.style.backgroundColor = "orange";
+            } else {
+                fill.style.backgroundColor = "red";
+            }
+
+            text.innerText = `${d.level} Congestion (${d.percentage}%)`;
+        })
+        .catch(() => {
+            document.getElementById("congestion-text")
+                .innerText = "Congestion data unavailable";
+        });
+}
+
+loadCongestion();
+let slotSelected = false;
+
+
+function loadSlotCongestion() {
+    const slot = document.getElementById("slot-select").value;
+    const date = document.getElementById("booking-date").value;
+
+    if (!slot || !date) return;
+
+    fetch("/slot_congestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            station_id: stationId,
+            slot_number: Number(slot),
+            date: date
+        })
+    })
+    .then(res => res.json())
+    .then(d => {
+        const fill = document.getElementById("congestion-fill");
+        const text = document.getElementById("congestion-text");
+
+        fill.style.width = d.percentage + "%";
+
+        if (d.level === "GREEN") fill.style.background = "green";
+        else if (d.level === "YELLOW") fill.style.background = "orange";
+        else fill.style.background = "red";
+
+        text.innerText = `Slot Congestion: ${d.level} (${d.percentage}%)`;
+    });
+}
+
+setInterval(() => {
+    if (!slotSelected) loadCongestion();
+}, 30000);
+
+
+document.getElementById("slot-select")
+    .addEventListener("change", loadSlotCongestion);
+
+document.getElementById("booking-date")
+    .addEventListener("change", loadSlotCongestion);
+
+
+        function fetchVehicles() {
+            $.ajax({
+                url: '/get_user_vehicles',
+                method: 'GET',
+                success: function(response) {
+                    const vehicleSelect = document.getElementById('vehicle-select');
+                    response.vehicles.forEach(vehicle => {
+                        const option = document.createElement('option');
+                        option.value = vehicle.id;
+                        option.textContent = `${vehicle.vehicle_name} (${vehicle.license_plate})`;
+                        vehicleSelect.appendChild(option);
+                    });
+                },
+                error: function(xhr) {
+                    alert("Error fetching vehicles.");
+                }
+            });
+        }
+
+        if (isNaN(stationLat) || isNaN(stationLon)) {
+            alert("Invalid station coordinates. Please check the coordinates and try again.");
+        } else {
+            document.getElementById('route-info').innerHTML = `Route to ${stationName} - ${stationAddress}`;
+            initMap();
+            fetchVehicles();
+        }
+
+        function initMap() {
+            map = L.map('map').setView([userLat, userLon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            routeLayer = L.layerGroup().addTo(map);
+
+            L.marker([userLat, userLon], { color: 'blue' })
+                .bindPopup('Your Location')
+                .addTo(map);
+
+            L.marker([stationLat, stationLon], { color: 'green' })
+                .bindPopup(stationName)
+                .addTo(map);
+
+            fetchRoute(userLat, userLon, stationLat, stationLon);
+        }
+
+        function fetchRoute(startLat, startLon, endLat, endLon) {
+            const routeUrl = `https://us1.locationiq.com/v1/directions/driving/${startLon},${startLat};${endLon},${endLat}?key=${locationIQApiKey}&overview=full&geometries=geojson`;
+
+            fetch(routeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        const route = data.routes[0];
+                        const routeGeoJson = route.geometry;
+
+                        L.geoJSON(routeGeoJson).addTo(routeLayer);
+                        document.getElementById('route-info').innerHTML += `<br>Distance: ${(route.distance / 1000).toFixed(2)} km, Duration: ${(route.duration / 60).toFixed(2)} minutes`;
+                    } else {
+                        alert('Route not found.');
+                    }
+                })
+                .catch(error => {
+                    alert('Error fetching route.');
+                });
+        }  
+
+ function bookSlot() {
+    const slot = document.getElementById("slot-select").value;
+    const vehicleId = document.getElementById("vehicle-select").value;
+    const kwh = document.getElementById("kwh-input").value;
+    const date = document.getElementById("booking-date").value;
+    const time = document.getElementById("selected-time")?.value;
+
+    if (!slot || !vehicleId || !kwh || !date || !time) {
+        alert("Please complete all selections");
+        return;
+    }
+
+    fetch("/book_slot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            station_id: stationId,
+            slot_name: Number(slot),
+            date: date,
+            start_time: time,
+            vehicle_id: Number(vehicleId),
+            kwh: Number(kwh)
+        })
+    })
+    .then(res => res.json())
+.then(data => {
+    if (data.status === "success") {
+        alert(data.message);
+
+        // ✅ Redirect to charging stations page
+        window.location.href = data.redirect;
+    } else {
+        alert(data.message || "Booking failed");
+    }
+})
+.catch(err => {
+    console.error(err);
+    alert("Booking failed");
+});
+}
+
+
+
+function loadAvailableTimes() {
+    const slot = document.getElementById("slot-select").value;
+    const vehicleId = document.getElementById("vehicle-select").value;
+    const kwh = document.getElementById("kwh-input").value;
+    const date = document.getElementById("booking-date").value;
+
+    if (!slot || !vehicleId || !kwh || !date) return;
+    
+    fetch("/available_start_times", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            station_id: stationId,
+            slot_number: Number(slot),
+            date: date,
+            vehicle_id: Number(vehicleId),
+            kwh: Number(kwh)
+        })
+    })
+    .then(res => res.json())
+    .then(data => renderTimeOptions(data.available_times))
+    .catch(err => console.error(err));
+}
+document.getElementById("slot-select").addEventListener("change", loadAvailableTimes);
+document.getElementById("vehicle-select").addEventListener("change", loadAvailableTimes);
+document.getElementById("kwh-input").addEventListener("input", loadAvailableTimes);
+document.getElementById("booking-date").addEventListener("change", loadAvailableTimes);
+
+
+function renderTimeOptions(times) {
+    const container = document.getElementById("time-container");
+    container.innerHTML = "";
+    const kwh = Number(document.getElementById("kwh-input").value);
+    if (times.length === 0) {
+        container.innerHTML = "<p>No time available for this slot</p>";
+        return;
+    }
+    if (!kwh || kwh <= 0) {
+        container.innerHTML =
+            "<p style='color:red'>Enter valid kWh (> 0) to see available times</p>";
+        return;
+    }
+    // ONLY ONE → AUTO SELECT
+    if (times.length === 1) {
+        container.innerHTML = `
+            <input type="hidden" id="selected-time" value="${times[0]}">
+            <p>Auto selected time: <b>${times[0]}</b></p>
+        `;
+        return;
+    }
+
+    // MULTIPLE → USER SELECT
+    let html = `<label>Select Time:</label><select id="selected-time">`;
+    times.forEach(t => {
+        html += `<option value="${t}">${t}</option>`;
+    });
+    html += `</select>`;
+
+    container.innerHTML = html;
+}
+
+    </script>
+</body>
+
+</html>

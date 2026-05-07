@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .close-btn {
+  background:#28a745;
+  color:#fff;
+  padding:6px 12px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.close-btn:hover {
+  background:#218838;
+}
+
+.closed {
+  color: green;
+  font-weight: bold;
+}
+/* FLASH NOTIFICATIONS */
+.flash-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.flash {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  animation: slideIn 0.4s ease;
+}
+
+/* Success */
+.flash.success {
+  background: #e6f9f0;
+  color: #065f46;
+  border-left: 5px solid #10b981;
+}
+
+/* Error */
+.flash.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 5px solid #ef4444;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Contact Us Messages</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admincontactus.css') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-wrapper">
+  {% for category, message in messages %}
+    <div class="flash {{ category }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+    <header>
+        <div class="container">
+            <h1 class="logo">ChargeMate Admin</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('admin.dashboard') }}">Back</a></li>
+                    
+                    <!-- Add other admin links here -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="admin-contact-us">
+            <h2>Contact Us Messages</h2>
+
+            {% if contact_messages %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>User</th>
+                            <th>Message</th>
+                            <th>Solution</th>
+                            <th>Status</th>
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contact in contact_messages %}
+                            <tr>
+                                <td>{{ contact.subject }}</td>
+                                <td>{{ contact.user_name }}</td>
+                                <td>{{ contact.message }}</td>
+                                <td>
+  {% if contact.status != 'Closed' %}
+  <form method="POST" action="{{ url_for('admin.close_contact', contact_id=contact.id) }}">
+      <textarea name="admin_reply" placeholder="Write solution..." required
+        style="width:100%; height:80px;"></textarea>
+      <button type="submit" class="close-btn">Close & Notify</button>
+  </form>
+  {% else %}
+    <span class="closed">{{contact.admin_reply}}</span>
+  {% endif %}
+</td>
+                                <td>{{ contact.status }}</td>
+                        
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No contact messages found.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    
+</body>
+</html>
+

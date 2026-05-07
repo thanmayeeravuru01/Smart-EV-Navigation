@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Battery Health – ChargeMate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/battery_health.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="bh-navbar">
+    <div class="bh-left">
+        <div class="bh-hamburger" onclick="toggleMenu()">☰</div>
+        <span class="bh-title">ChargeMate</span>
+    </div>
+    <div class="bh-right">
+      
+    <a href="{{ url_for('main.user_dashboard') }}" class="btn-back">⬅ Back</a>
+
+    </div>
+</div>
+
+<!-- ================= SIDE MENU ================= -->
+<div class="bh-menu" id="bhMenu">
+    <a href="{{ url_for('main.profile') }}">👤 Profile</a>
+    <a href="{{ url_for('main.change_password') }}">🔑 Change Password</a>
+    
+    <a href="{{ url_for('main.logout') }}" class="danger">🚪 Logout</a>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<div class="bh-container">
+
+    <!-- VEHICLE HEALTH CARDS -->
+    <div class="bh-card">
+        <h2>Your Vehicle Battery Health</h2>
+
+        {% for vehicle in vehicles %}
+        <div class="bh-vehicle">
+            <h3>{{ vehicle.vehicle_name }} ({{ vehicle.license_plate }})</h3>
+
+            <div class="bh-stats">
+                <div class="stat">
+                    <span>Health</span>
+                    <strong>{{ vehicle.battery_health }}%</strong>
+                </div>
+                <div class="stat">
+                    <span>Charge Cycles</span>
+                    <strong>{{ vehicle.charge_cycles }}</strong>
+                </div>
+            </div>
+
+            <div class="bh-bar">
+               <div class="bh-fill" style="width: {{ vehicle.battery_health }}%;"></div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- GRAPH -->
+    <div class="bh-card">
+        <h2>Battery Health vs Charge Cycles</h2>
+        <div class="bh-graph">
+            <img src="data:image/png;base64,{{ graph_url }}" alt="Battery Health Graph">
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+function toggleMenu() {
+    document.getElementById("bhMenu").classList.toggle("show");
+}
+
+document.addEventListener("click", function(e) {
+    const menu = document.getElementById("bhMenu");
+    if (!e.target.closest(".bh-hamburger")) {
+        menu.classList.remove("show");
+    }
+});
+</script>
+
+</body>
+</html>

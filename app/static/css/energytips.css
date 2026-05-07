@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* NAVBAR */
+.et-navbar {
+    height: 64px;
+    background: linear-gradient(135deg, #0a7cff, #04befe);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.et-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.et-hamburger {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.et-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* MENU */
+.et-menu {
+    position: absolute;
+    top: 64px;
+    left: 20px;
+    width: 230px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+}
+
+.et-menu a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.et-menu a:hover {
+    background: #f1f5f9;
+}
+
+.et-menu .danger {
+    color: #dc2626;
+}
+
+.et-menu.show {
+    display: block;
+}
+
+/* CONTENT */
+.et-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    color: #1f2937;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+/* TIPS */
+.tip-card {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+}
+
+.tip-header {
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tip-header button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.tip-body {
+    padding: 0 18px 16px;
+    display: none;
+    color: #374151;
+}
+
+.tip-body ul {
+    padding-left: 18px;
+}
+
+/* FOOTER */
+.et-footer {
+    text-align: center;
+    padding: 16px;
+    color: #6b7280;
+    margin-top: 40px;
+}

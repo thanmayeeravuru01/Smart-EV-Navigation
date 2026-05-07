@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vehicle – ChargeMate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_vehicle.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="av-navbar">
+    <div class="av-left">
+        <div class="av-hamburger" onclick="toggleMenu()">☰</div>
+        <span class="av-title">ChargeMate</span>
+    </div>
+    <div class="av-right">
+        <span class="av-user">Add Vehicle</span>
+    </div>
+</div>
+
+<!-- ================= SIDE MENU ================= -->
+<div class="av-menu" id="avMenu">
+    <a href="{{ url_for('main.profile') }}">👤 Profile</a>
+    <a href="{{ url_for('main.change_password') }}">🔑 Change Password</a>
+    <a href="{{ url_for('main.view_vehicles') }}">🚗 My Vehicles</a>
+    <a href="{{ url_for('main.logout') }}" class="danger">🚪 Logout</a>
+</div>
+
+<!-- ================= FLASH ================= -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="av-flash-wrapper">
+    {% for category, message in messages %}
+        {% if category == 'vehicle' %}
+        <div class="av-flash">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- ================= FORM ================= -->
+<div class="av-container">
+    <div class="av-card">
+        <h2>Add New EV Vehicle</h2>
+
+        <form action="{{ url_for('main.add_vehicle') }}" method="POST">
+
+            <div class="av-group">
+                <label>Vehicle Name</label>
+                <input type="text" name="vehicle_name" required>
+            </div>
+
+            <div class="av-group">
+                <label>Vehicle Type</label>
+                <input type="text" name="vehicle_type" required>
+            </div>
+
+            <div class="av-group">
+                <label>License Plate</label>
+                <input type="text" name="license_plate" required>
+            </div>
+
+            <div class="av-group">
+                <label>Battery Capacity (kWh)</label>
+                <input type="number" step="0.1" name="battery_capacity" required>
+            </div>
+
+            <div class="av-group">
+                <label>Range per Charge (km)</label>
+                <input type="number" name="range_per_charge" required>
+            </div>
+
+            <div class="av-group">
+                <label>Max Charging Rate</label>
+                <input type="number" name="max_charging_rate" required>
+            </div>
+
+            <button type="submit" class="av-btn">➕ Add Vehicle</button>
+        </form>
+    </div>
+</div>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+function toggleMenu() {
+    document.getElementById("avMenu").classList.toggle("show");
+}
+
+document.addEventListener("click", function(e) {
+    const menu = document.getElementById("avMenu");
+    if (!e.target.closest(".av-hamburger")) {
+        menu.classList.remove("show");
+    }
+});
+
+setTimeout(() => {
+    const f = document.querySelector('.av-flash-wrapper');
+    if (f) f.style.display = 'none';
+}, 3000);
+</script>
+
+</body>
+</html>

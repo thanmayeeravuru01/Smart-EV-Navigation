@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Complete Payment</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #0a7cff, #00c6ff);
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .payment-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      padding: 30px;
+      animation: fadeIn 0.4s ease-in;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #0a7cff;
+    }
+
+    .detail {
+      margin-bottom: 15px;
+      font-size: 15px;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .detail span {
+      font-weight: bold;
+    }
+
+    .amount-box {
+      background: #f1f5ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: center;
+      border-left: 4px solid #0a7cff;
+    }
+
+    .amount-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .amount-box h3 {
+      margin-top: 8px;
+      font-size: 26px;
+      color: #0a7cff;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #0a7cff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .pay-btn:hover {
+      background: #055ed6;
+      transform: translateY(-2px);
+    }
+
+    .secure {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="payment-card">
+    <h2>Complete Payment</h2>
+
+    <div class="detail">
+      <p>Station</p>
+      <span>{{ booking.station.name }}</span>
+    </div>
+
+    <div class="detail">
+      <p>Start Time</p>
+      <span>{{ booking.start_time }}</span>
+    </div>
+
+    <div class="detail">
+      <p>End Time</p>
+      <span>{{ booking.end_time }}</span>
+    </div>
+
+    <div class="amount-box">
+      <p>Total Amount</p>
+      <h3>₹ {{ booking.final_price }}</h3>
+    </div>
+
+    <form action="{{ url_for('main.process_payment', booking_id=booking.id) }}" method="POST">
+      <button class="pay-btn">Pay Now</button>
+    </form>
+
+    <div class="secure">
+      🔒 Secure payment • Powered by ChargeMate
+    </div>
+  </div>
+
+</body>
+</html>

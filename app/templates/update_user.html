@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update User | ChargeMate Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 28px 32px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #1e293b;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #0a7cff;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 14px;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0a7cff;
+      box-shadow: 0 0 0 2px rgba(10,124,255,0.15);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: linear-gradient(135deg, #0a7cff, #04befe);
+      border: none;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      box-shadow: 0 10px 20px rgba(10,124,255,0.35);
+    }
+
+    /* FLASH */
+    .flash-wrapper {
+      margin-bottom: 16px;
+    }
+
+    .flash {
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      animation: fadeIn .3s ease;
+    }
+
+    .flash.success {
+      background: #e6f9f0;
+      color: #065f46;
+      border-left: 5px solid #10b981;
+    }
+
+    .flash.error {
+      background: #fee2e2;
+      color: #7f1d1d;
+      border-left: 5px solid #ef4444;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <a href="{{ url_for('admin.view_users') }}" class="back-btn">← Back to Users</a>
+
+    <!-- FLASH -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrapper">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+
+    <h1>Update User</h1>
+
+    <form action="{{ url_for('admin.update_user', user_id=user.user_id) }}" method="POST">
+      <label>Name</label>
+      <input type="text" name="name" value="{{ user.name }}" required>
+
+      <label>Email</label>
+      <input type="email" name="email" value="{{ user.email }}" required>
+
+      <label>Phone</label>
+      <input type="text" name="phone" value="{{ user.phone }}">
+
+      <button type="submit">Update User</button>
+    </form>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      const f = document.querySelector('.flash-wrapper');
+      if (f) f.style.display = 'none';
+    }, 3000);
+  </script>
+
+</body>
+</html>

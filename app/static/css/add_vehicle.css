@@ -1,0 +1,157 @@
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* ===== NAVBAR ===== */
+.av-navbar {
+    height: 64px;
+    background: linear-gradient(135deg, #00509e, #00509e);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.av-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.av-hamburger {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.av-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.av-user {
+    font-weight: 500;
+}
+
+/* ===== SIDE MENU ===== */
+.av-menu {
+    position: absolute;
+    top: 64px;
+    left: 20px;
+    width: 230px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.av-menu a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.av-menu a:hover {
+    background: #f1f5f9;
+}
+
+.av-menu .danger {
+    color: #dc2626;
+}
+
+.av-menu.show {
+    display: block;
+}
+
+/* ===== FLASH ===== */
+.av-flash-wrapper {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.av-flash {
+    background: #e6fffa;
+    color: #065f46;
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ===== FORM ===== */
+.av-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.av-card {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+.av-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #1f2937;
+    text-align: center;
+}
+
+.av-group {
+    margin-bottom: 16px;
+}
+
+.av-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.av-group input {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+}
+
+.av-group input:focus {
+    outline: none;
+    border-color: #0a7cff;
+    box-shadow: 0 0 0 2px rgba(10,124,255,0.15);
+}
+
+/* ===== BUTTON ===== */
+.av-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #00509e, #00509e);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.av-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(10,124,255,0.35);
+}

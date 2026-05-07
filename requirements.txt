@@ -1,0 +1,16 @@
+Flask
+Gunicorn
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Mail
+itsdangerous
+pandas
+reportlab
+SQLAlchemy
+Werkzeug
+pymysql
+geopy
+requests
+psycopg2-binary>=2.9,<3.0
+matplotlib
+sendgrid==6.11.0

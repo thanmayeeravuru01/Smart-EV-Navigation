@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Bookings</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: #004d99;
+            color: #ffffff;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background-color: #f1f7ff;
+        }
+
+        .status-Pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .status-Accepted {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-Rejected,
+        .status-Cancelled {
+            color: red;
+            font-weight: bold;
+        }
+
+        .price-muted {
+            color: #999;
+        }
+
+        @media screen and (max-width: 900px) {
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>All Bookings</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Station</th>
+            <th>Slot</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>kWh</th>
+            <th>System Price</th>
+            <th>Final Price</th>
+            <th>Status</th>
+            <th>Payment Status</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in bookings %}
+        <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.user_id }}</td>
+            <td>{{ b.station.name }}</td>
+            <td>Slot {{ b.slot.slot_number }}</td>
+            <td>{{ b.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ b.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ b.kwh }}</td>
+            <td>₹{{ b.system_price }}</td>
+            <td>
+                {% if b.status == 'Accepted' %}
+                    ₹{{ b.final_price }}
+                {% else %}
+                    <span class="price-muted">—</span>
+                {% endif %}
+            </td>
+            <td class="status-{{ b.status }}">{{ b.status }}</td>
+            <td >{{b.payment_status}}</td>
+            <td>{{ b.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="11" style="text-align:center; padding:20px;">
+                No bookings found
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

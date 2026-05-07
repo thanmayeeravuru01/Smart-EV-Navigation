@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+
+  <style>
+    body {
+      background-image: url('https://d17ocfn2f5o4rl.cloudfront.net/wp-content/uploads/2019/03/navigation-header.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* HEADER */
+    .page-header {
+  position: relative;
+  display: flex;
+  justify-content: center; /* center title */
+  align-items: center;
+  padding: 16px 24px;
+  background:#00509e;
+  color: white;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+/* Dashboard button top-right */
+.dashboard-btn {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      background: white;
+      color: #004d99;
+    }
+
+    /* FLASH */
+    .flash-wrapper {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      z-index: 2000;
+    }
+
+    .flash {
+      background: #e8f5e9;
+      color: #1b5e20;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* TABLE */
+    .table-wrapper {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #004d99;
+      color: white;
+    }
+
+    /* PAYMENT STATES */
+    .pay-btn {
+      background: #0a7cff;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .pay-btn:hover {
+      background: #045ecb;
+    }
+
+    .paid {
+      color: green;
+      font-weight: bold;
+    }
+
+    .pending {
+      color: #b45309;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <h1>My Bookings</h1>
+
+  <button class="back-btn dashboard-btn"
+          onclick="window.location.href='{{ url_for('main.user_dashboard') }}'">
+     →Dashboard
+  </button>
+</div>
+
+
+<!-- FLASH NOTIFICATIONS -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-wrapper">
+  {% for category, message in messages %}
+    {% if category == 'booking_user' %}
+      <div class="flash">{{ message }}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- TABLE -->
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>Station</th>
+      <th>Slot</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>kWh</th>
+      <th>Price</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Payment</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for booking, station, slot in bookings %}
+    <tr>
+      <td>{{ station.name }}</td>
+      <td>Slot {{ slot.slot_number }}</td>
+      <td>{{ booking.start_time.strftime('%Y-%m-%d') }}</td>
+      <td>{{ booking.start_time.strftime('%H:%M') }} – {{ booking.end_time.strftime('%H:%M') }}</td>
+      <td>{{ booking.kwh }}</td>
+      <td>
+        {% if booking.status == 'Accepted' %}
+          ₹{{ booking.final_price }}
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      <td>{{ booking.price_reason or '—' }}</td>
+      <td>{{ booking.status }}</td>
+      <td>
+        {% if booking.status == "Accepted" and booking.payment_status != "Paid" %}
+          <a href="{{ url_for('main.payment_page', booking_id=booking.id) }}" class="pay-btn">
+            Pay ₹{{ booking.final_price }}
+          </a>
+        {% elif booking.payment_status == "Paid" %}
+          <span class="paid">Paid ✅</span>
+        {% elif booking.status == "Rejected"%}
+         <span class="pending">No Payment Required🚫</span>
+        {% else %}
+          <span class="pending">Awaiting Approval</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<!-- AUTO HIDE FLASH -->
+<script>
+setTimeout(() => {
+  const f = document.querySelector('.flash-wrapper');
+  if (f) f.style.display = 'none';
+}, 3000);
+</script>
+
+</body>
+</html>
+
